@@ -118,7 +118,13 @@ const union {
                             endian.byte[6] == 2 && \
                             endian.byte[7] == 1)
 
-#if defined(__GNUC__) || defined(__clang__)
+#ifdef __GNUC__
+#define __GCC_VERSION__ (__GNUC__ * 100 + __GNUC_MINOR__)
+#else
+#define __GCC_VERSION__ 0
+#endif
+
+#if __GCC_VERSION__ >= 402 || defined(__clang__)
 static inline uint64_t bswap64(uint64_t x) { return __builtin_bswap64(x); }
 #elif defined(_MSC_VER)
 static inline uint64_t bswap64(uint64_t x) { return _byteswap_uint64(x); }
